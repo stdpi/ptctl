@@ -1,0 +1,3126 @@
+openapi: 3.1.0
+info:
+  title: Client API
+  version: '1.0'
+  description: Provides access to servers and general account related management endpoints.
+  license:
+    name: The MIT License (MIT)
+    url: 'https://github.com/pterodactyl/panel/blob/develop/LICENSE.md'
+  contact:
+    name: Dane Everitt
+    url: 'https://pterodactyl.io'
+    email: dane@pterodactyl.io
+  summary: Client API
+servers:
+  - url: 'https://pterodactyl.test/api/client'
+    description: Client API
+paths:
+  /:
+    get:
+      summary: Get Servers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/server'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '405':
+          $ref: '#/components/responses/405'
+      operationId: get-servers
+      description: Returns a list of all servers the owner of the API key has access to.
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - admin
+              - owner
+              - admin-all
+          in: query
+          name: type
+          description: >-
+            Determines which servers to return. If not specified all servers you
+            have access to as an owner or subuser are returned.
+          style: form
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - schema:
+            type: string
+            uniqueItems: true
+            example: 'filter[*]=playthrough'
+          in: query
+          name: 'filter[*]'
+          style: form
+          description: Allows filtering of the results before they are returned.
+        - schema:
+            type: string
+            uniqueItems: true
+            example: 'filter[name]=minecraft'
+          in: query
+          name: 'filter[name]'
+          style: form
+          description: Allows filtering of the results before they are returned.
+        - schema:
+            type: string
+            uniqueItems: true
+            example: 'filter[uuid]=4d3e1401'
+          in: query
+          name: 'filter[uuid]'
+          style: form
+          description: Allows filtering of the results before they are returned.
+    parameters: []
+
+  /permissions:
+    get:
+      summary: List Permissions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      permissions:
+                        type: object
+                        properties:
+                          websocket:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  connect:
+                                    type: string
+                          control:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  console:
+                                    type: string
+                                  start:
+                                    type: string
+                                  stop:
+                                    type: string
+                                  restart:
+                                    type: string
+                          user:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  create:
+                                    type: string
+                                  read:
+                                    type: string
+                                  update:
+                                    type: string
+                                  delete:
+                                    type: string
+                          file:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  create:
+                                    type: string
+                                  read:
+                                    type: string
+                                  read-content:
+                                    type: string
+                                  update:
+                                    type: string
+                                  delete:
+                                    type: string
+                                  archive:
+                                    type: string
+                                  sftp:
+                                    type: string
+                          backup:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  create:
+                                    type: string
+                                  read:
+                                    type: string
+                                  delete:
+                                    type: string
+                                  download:
+                                    type: string
+                                  restore:
+                                    type: string
+                          allocation:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  read:
+                                    type: string
+                                  create:
+                                    type: string
+                                  update:
+                                    type: string
+                                  delete:
+                                    type: string
+                          startup:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  read:
+                                    type: string
+                                  update:
+                                    type: string
+                                  docker-image:
+                                    type: string
+                          database:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  create:
+                                    type: string
+                                  read:
+                                    type: string
+                                  update:
+                                    type: string
+                                  delete:
+                                    type: string
+                                  view_password:
+                                    type: string
+                          schedule:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  create:
+                                    type: string
+                                  read:
+                                    type: string
+                                  update:
+                                    type: string
+                                  delete:
+                                    type: string
+                          settings:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  rename:
+                                    type: string
+                                  reinstall:
+                                    type: string
+                          activity:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                              keys:
+                                type: object
+                                properties:
+                                  read:
+                                    type: string
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '405':
+          $ref: '#/components/responses/405'
+      operationId: get-permissions
+      description: Returns all of the permissions on the Panel instance.
+      x-internal: false
+
+  /account:
+    get:
+      summary: Get Account Details
+      operationId: get-account
+      description: Retrieves information about the account the API key is associated with.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/user'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '405':
+          $ref: '#/components/responses/405'
+      tags:
+        - Account
+
+  /account/two-factor:
+    get:
+      summary: Setup 2FA
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      image_url_data:
+                        type: string
+                      secret:
+                        type: string
+      operationId: get-account-two-factor
+      description: >-
+        Generates a new secret code and associated TOTP data. This can then be
+        used to generate a QR code for the user to scan with their device.
+        Subsequent requests to this endpoint will trigger the secret to be
+        rotated, thus invalidating previous tokens.
+      tags:
+        - Account
+    post:
+      summary: Enable 2FA
+      operationId: post-account-two-factor
+      responses:
+        '200':
+          description: >-
+            The response body will contain an array of recovery codes that the
+            user can use if they lose their device.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      tokens:
+                        type: array
+                        items:
+                          type: string
+      description: >-
+        Enable 2FA on an account using the code generated by the `GET` version
+        of this endpoint.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                password:
+                  type: string
+              required:
+                - code
+                - password
+        description: >-
+          The request body must include only the 6-digit code generated by the
+          user's 2FA application. It must also include the user's current
+          password.
+      tags:
+        - Account
+    delete:
+      summary: Disable 2FA
+      operationId: delete-account-two-factor
+      responses:
+        '204':
+          description: No Content
+      description: Disables 2FA on a user's account if it has already been enabled.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+              required:
+                - password
+        description: ''
+      tags:
+        - Account
+
+  /account/email:
+    put:
+      summary: Change Email
+      operationId: put-email
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The new email address to use for this account.
+                password:
+                  type: string
+                  description: The current account password.
+              required:
+                - email
+                - password
+      description: Updates the email address for the current account.
+      tags:
+        - Account
+    parameters: []
+
+  /account/password:
+    put:
+      summary: Change Password
+      operationId: put-password
+      responses:
+        '204':
+          description: No Content
+      description: >-
+        Updates the password for the current account and signs out all other
+        active sessions.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+              required:
+                - current_password
+                - password
+                - password_confirmation
+      tags:
+        - Account
+    parameters: []
+
+  /account/activity:
+    get:
+      summary: Get Account Activity
+      operationId: get-account-activity
+      description: Returns a paginated list of activity log entries for the authenticated user.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/activity-log'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - schema:
+            type: string
+          in: query
+          name: 'filter[event]'
+          description: Partial match filter on event name.
+      tags:
+        - Account
+
+  /account/api-keys:
+    get:
+      summary: Get API Keys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                          enum:
+                            - api_key
+                        attributes:
+                          $ref: '#/components/schemas/api-key'
+      operationId: get-account-api-keys
+      description: Returns a list of all active API keys for an account.
+      tags:
+        - Account
+    parameters: []
+    post:
+      summary: Create API Key
+      operationId: post-account-api-keys
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - api_key
+                  attributes:
+                    $ref: '#/components/schemas/api-key'
+                  meta:
+                    type: object
+                    properties:
+                      secret_token:
+                        type: string
+                        description: >-
+                          The secret part of the API key. This should be
+                          concatenated with the `identifier` returned in the
+                          `attributes` object.
+      description: Creates a new API key for an account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: A short description of the API key.
+                  maxLength: 500
+                allowed_ips:
+                  type: array
+                  maxItems: 50
+                  uniqueItems: true
+                  description: >-
+                    The `allowed_ips` field can include up to 50 IP addresses
+                    that are allowed to make use of the generated API key. IPs
+                    can be written in CIDR notation to support larger ranges.
+                  items:
+                    type: string
+                    example: 192.168.1.100/29
+        description: ''
+      tags:
+        - Account
+
+  '/account/api-keys/{identifier}':
+    parameters:
+      - $ref: '#/components/parameters/api-key'
+    delete:
+      summary: Delete API Key
+      operationId: delete-account-api-keys-identifier
+      responses:
+        '204':
+          description: No Content
+      description: Deletes an API key.
+      tags:
+        - Account
+
+  /account/ssh-keys:
+    get:
+      summary: Get SSH Keys
+      operationId: get-account-ssh-keys
+      description: Returns a list of your ssh keys.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                          enum:
+                            - ssh_key
+                        attributes:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            fingerprint:
+                              type: string
+                            public_key:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+      tags:
+        - Account
+    post:
+      summary: Create SSH Key
+      operationId: post-account-ssh-keys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - ssh_key
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      fingerprint:
+                        type: string
+                      public_key:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                public_key:
+                  type: string
+              required:
+                - name
+                - public_key
+        description: >-
+          The public key **must** be for a 2048+ bit `RSA` key or an `ECDSA`
+          key. `DSA` keys and `RSA` keys less than 2048 bits are not supported.
+      tags:
+        - Account
+      description: Adds an SSH key to the user's account.
+
+  /account/ssh-keys/remove:
+    parameters: []
+    post:
+      summary: Remove SSH Key
+      operationId: post-account-ssh-keys-remove
+      responses:
+        '204':
+          description: No Content
+      description: Removes an SSH key from a user's account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fingerprint:
+                  type: string
+                  description: The fingerprint of the SSH key to be removed.
+              required:
+                - fingerprint
+      tags:
+        - Account
+
+  '/servers/{server}':
+    get:
+      summary: Get Server Details
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - server
+                  attributes:
+                    $ref: '#/components/schemas/server'
+                  meta:
+                    type: object
+                    properties:
+                      is_server_owner:
+                        type: boolean
+                        description: >-
+                          If the user making the API request is the owner of the
+                          server this value will be `true` — in all other cases
+                          it is `false`.
+                      user_permissions:
+                        type: array
+                        items:
+                          type: string
+      operationId: get-server-details
+      description: Returns details about a specific server.
+      parameters:
+        - $ref: '#/components/parameters/include'
+      tags:
+        - Server
+    parameters:
+      - $ref: '#/components/parameters/server'
+
+  '/servers/{server}/websocket':
+    get:
+      summary: Get Server Websocket
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: >-
+                          The authentication token to use once connected to the
+                          websocket. Valid for 10 minutes.
+                      socket:
+                        type: string
+                        format: uri
+                        description: The WebSocket URL to connect to.
+      operationId: get-server-websocket
+      description: >-
+        Returns credentials and a connection address to access the server's
+        websocket. _This is not an actual websocket connection, you must connect
+        separately using the details returned by this endpoint._
+      parameters: []
+      tags:
+        - Server
+    parameters:
+      - $ref: '#/components/parameters/server'
+
+  '/servers/{server}/resources':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Resource usage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - stats
+                  attributes:
+                    $ref: '#/components/schemas/stats'
+      operationId: get-servers-identifier-resources
+      description: >-
+        Returns the current resource usage for the specified server. This
+        endpoint utilizes a caching mechanism, updates can take up to 20 seconds
+        to reflect. For real-time statistics, you should connect to the server's
+        websocket and listen to the "stats" event.
+      tags:
+        - Server
+
+  '/servers/{server}/command':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Send command
+      operationId: post-server-command
+      responses:
+        '204':
+          description: No Content
+        '502':
+          description: >-
+            A `502: Bad Gateway` error is returned when the server is currently
+            offline and cannot receive commands.
+      description: Send a command to a running server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  description: The command to be sent to the server instance.
+                  minLength: 1
+              required:
+                - command
+      tags:
+        - Server
+
+  '/servers/{server}/power':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Send Power Action
+      operationId: post-server-power
+      responses:
+        '204':
+          description: No Content
+      description: Sends a power action to the server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  type: string
+                  enum:
+                    - start
+                    - stop
+                    - restart
+                    - kill
+              required:
+                - signal
+      tags:
+        - Server
+
+  '/servers/{server}/activity':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get Server Activity
+      operationId: get-server-activity
+      description: Returns a paginated list of activity log entries for the server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/activity-log'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - schema:
+            type: string
+          in: query
+          name: 'filter[event]'
+          description: Partial match filter on event name.
+      tags:
+        - Server
+
+  '/servers/{server}/databases':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get server databases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                          enum:
+                            - server_database
+                        attributes:
+                          $ref: '#/components/schemas/server-database'
+      operationId: get-server-databases
+      parameters:
+        - $ref: '#/components/parameters/include'
+      description: Returns all of the databases that exist for the server.
+      tags:
+        - Server Databases
+    post:
+      summary: Create server database
+      operationId: post-server-databases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/server-database'
+      description: Creates a new database for the server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                database:
+                  type: string
+                  pattern: '^[A-Za-z0-9_-]+$'
+                  minLength: 3
+                  maxLength: 48
+                remote:
+                  type: string
+                  pattern: '^[A-Za-z0-9_\/.%:-]+$'
+                  minLength: 1
+              required:
+                - database
+                - remote
+      tags:
+        - Server Databases
+
+  '/servers/{server}/databases/{database}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - $ref: '#/components/parameters/database'
+    delete:
+      summary: Delete database
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-server-database
+      description: Deletes the given database for the server.
+      tags:
+        - Server Databases
+
+  '/servers/{server}/databases/{database}/rotate-password':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - $ref: '#/components/parameters/database'
+    post:
+      summary: Rotate database password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - server_database
+                  attributes:
+                    $ref: '#/components/schemas/server-database'
+      operationId: post-server-database-rotate-password
+      description: Generates a new random password for the database.
+      tags:
+        - Server Databases
+
+  '/servers/{server}/startup':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get Server Startup
+      tags:
+        - Server
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                          enum:
+                            - egg_variable
+                        attributes:
+                          $ref: '#/components/schemas/egg-variable'
+                  meta:
+                    type: object
+                    properties:
+                      startup_command:
+                        type: string
+                        description: The startup command with all variables replaced.
+                      raw_startup_command:
+                        type: string
+                        description: The raw startup command without variables replaced.
+                      docker_images:
+                        type: object
+                        description: >-
+                          An object containing all docker images that can be
+                          used for this server's egg, keyed by display name.
+      operationId: get-servers-server-startup
+      description: Returns the startup command and variables for a server.
+
+  '/servers/{server}/startup/variable':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    put:
+      summary: Update Server Variable
+      tags:
+        - Server
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - egg_variable
+                  attributes:
+                    $ref: '#/components/schemas/egg-variable'
+                  meta:
+                    type: object
+                    properties:
+                      startup_command:
+                        type: string
+                      raw_startup_command:
+                        type: string
+      operationId: put-servers-server-startup-variable
+      description: Updates an egg variable for a server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                  description: >-
+                    The `env_variable` value from the Egg Variable that should
+                    be updated.
+                  example: BUNGEE_VERSION
+                value:
+                  type:
+                    - string
+                    - number
+                    - boolean
+                    - 'null'
+                  description: >-
+                    The value to set for this variable — an empty value is
+                    allowed, but this key must always be present in the request.
+              required:
+                - key
+                - value
+
+  '/servers/{server}/settings/rename':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Rename Server
+      tags:
+        - Server
+      responses:
+        '204':
+          description: No Content
+      operationId: post-servers-server-settings-rename
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 191
+                description:
+                  type: string
+              required:
+                - name
+      description: Renames a server and (optionally) its description.
+
+  '/servers/{server}/settings/reinstall':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Reinstall Server
+      tags:
+        - Server
+      responses:
+        '202':
+          description: Accepted
+      operationId: reinstall-server
+      description: Triggers a reinstallation of the server.
+
+  '/servers/{server}/settings/docker-image':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    put:
+      summary: Update Docker Image
+      tags:
+        - Server
+      responses:
+        '204':
+          description: No Content
+      operationId: server-update-docker-image
+      description: >-
+        Updates the docker image that the server runs with. If the server's
+        docker image has been manually set by an administrator it cannot be
+        updated by this endpoint and a `400: Bad Request` error will be
+        returned.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                docker_image:
+                  type: string
+                  description: >-
+                    Must be one of the docker images returned by the API call to
+                    `/servers/{server}/startup`. A validation error will be
+                    returned if it is invalid.
+              required:
+                - docker_image
+
+  '/servers/{server}/backups':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get Server Backups
+      tags:
+        - Server Backups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                          enum:
+                            - backup
+                        attributes:
+                          $ref: '#/components/schemas/backup'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+                      backup_count:
+                        type: number
+      operationId: get-servers-server-backups
+      description: Returns all of the backups that exist for a server.
+    post:
+      summary: Create Server Backup
+      tags:
+        - Server Backups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - backup
+                  attributes:
+                    $ref: '#/components/schemas/backup'
+      operationId: post-servers-server-backups
+      description: >-
+        Creates a new backup for a server. Backups are performed in the
+        background and will not be complete when this endpoint returns a
+        successful value. You must connect to the server websocket and listen
+        for a completion event, or poll the server backup listing endpoint to
+        see when it is completed.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: >-
+                    The name of the backup, if not provided the current date and
+                    time is used.
+                  maxLength: 191
+                is_locked:
+                  type: boolean
+                  description: >-
+                    Whether or not the backup is considered locked once created.
+                    A locked backup is never deleted by system processes when
+                    the overall limit is reached for a server.
+                ignored:
+                  type: array
+                  description: >-
+                    An array of files and folders to ignore when performing the
+                    backup.
+                  items:
+                    type: string
+
+  '/servers/{server}/backups/{backup}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: string
+        name: backup
+        in: path
+        required: true
+        description: The UUID of the backup being requested.
+    get:
+      summary: Get Backup
+      tags:
+        - Server Backups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - backup
+                  attributes:
+                    $ref: '#/components/schemas/backup'
+      operationId: get-servers-server-backups-backup
+      description: Returns a single backup for a server.
+    delete:
+      summary: Delete Backup
+      tags:
+        - Server Backups
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-servers-server-backups-backup
+      description: >-
+        Deletes a backup for a server, even if the backup has `is_locked` set to
+        `true`.
+
+  '/servers/{server}/backups/{backup}/download':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: string
+        name: backup
+        in: path
+        required: true
+        description: The UUID of the backup being requested.
+    get:
+      summary: Download Backup
+      tags:
+        - Server Backups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    example: signed_url
+                    enum:
+                      - signed_url
+                  attributes:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+      operationId: server-download-backup
+      description: >-
+        Returns a signed download URL for the backup. The URL can be requested
+        directly to get a download response with the backup contents. This can
+        either be a Wings download URL or an S3 storage URL depending on the
+        storage driver being used. Wings download URLs are valid for 15 minutes,
+        whereas S3 storage URLs are valid for 5 minutes.
+
+  '/servers/{server}/backups/{backup}/lock':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: string
+        name: backup
+        in: path
+        required: true
+        description: The UUID of the backup being requested.
+    post:
+      summary: Toggle Backup Lock
+      operationId: post-servers-server-backups-backup-lock
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - backup
+                  attributes:
+                    $ref: '#/components/schemas/backup'
+      description: Toggles the locked state of a backup.
+      tags:
+        - Server Backups
+
+  '/servers/{server}/backups/{backup}/restore':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: string
+        name: backup
+        in: path
+        required: true
+        description: The UUID of the backup to restore.
+    post:
+      summary: Restore Backup
+      operationId: server-restore-backup
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: >-
+            A `400: Bad Request` response is returned if the backup is not
+            currently completed (or has failed), or when a server is currently
+            installing, transferring, or restoring from a different backup.
+      description: >-
+        Restores a backup for a server. If specified, the existing files in the
+        server will be truncated (or purged) before the backup is restored.
+      tags:
+        - Server Backups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                truncate:
+                  type: boolean
+                  description: Whether the existing files should be truncated.
+              required:
+                - truncate
+
+  '/servers/{server}/files/list':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: List Files
+      tags:
+        - Server Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/file-object'
+      operationId: get-servers-server-files-list
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: directory
+          description: The target directory to get files from.
+      description: >-
+        Returns a list of file objects for a given directory. You do NOT need to
+        include "/home/container" in the directory query parameter. If no
+        directory is specified, the root directory (`/home/container`) is used.
+
+  '/servers/{server}/files/contents':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get File Contents
+      tags:
+        - Server Files
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      operationId: get-server-file-contents
+      parameters:
+        - $ref: '#/components/parameters/file'
+      description: Get the raw contents of a file.
+
+  '/servers/{server}/files/download':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get File Download URL
+      tags:
+        - Server Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - signed_url
+                  attributes:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+      operationId: get-server-file-download
+      parameters:
+        - $ref: '#/components/parameters/file'
+      description: >-
+        Returns a signed download URL for a file. This URL can be requested
+        directly to get a download response with the file contents. This URL is
+        only valid for 15 minutes.
+
+  '/servers/{server}/files/rename':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    put:
+      summary: Rename Files
+      tags:
+        - Server Files
+      responses:
+        '204':
+          description: No Content
+      operationId: put-server-rename-files
+      description: Renames one or more files.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      from:
+                        type: string
+                      to:
+                        type: string
+              required:
+                - root
+                - files
+        description: Relative to the "root", rename files.
+
+  '/servers/{server}/files/copy':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Copy File
+      tags:
+        - Server Files
+      responses:
+        '204':
+          description: No Content
+      operationId: post-server-copy-file
+      description: Creates a copy of a file at the given location.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                location:
+                  type: string
+              required:
+                - location
+        description: Path of the file to copy.
+
+  '/servers/{server}/files/write':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Write File
+      tags:
+        - Server Files
+      responses:
+        '204':
+          description: No Content
+      operationId: post-server-write-file
+      description: >-
+        Writes the request body contents directly into a file. If the file path
+        does not exist, the file will be created instead.
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: Raw content to write to the file.
+      parameters:
+        - $ref: '#/components/parameters/file'
+
+  '/servers/{server}/files/compress':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Compress Files
+      operationId: post-servers-server-files-compress
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+      description: >-
+        Compresses the given files/directories into a single archive. Returns
+        the name of the created archive.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                  description: The root directory. Uses '/' if not provided.
+                files:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - files
+      tags:
+        - Server Files
+
+  '/servers/{server}/files/decompress':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Decompress Archive
+      operationId: post-servers-server-files-decompress
+      responses:
+        '204':
+          description: No Content
+      description: Decompresses an archive in the server's filesystem.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                  description: The root directory. Uses '/' if not provided.
+                file:
+                  type: string
+              required:
+                - file
+      tags:
+        - Server Files
+
+  '/servers/{server}/files/delete':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Delete Files
+      operationId: post-servers-server-files-delete
+      responses:
+        '204':
+          description: No Content
+      description: Deletes the given files from the server's filesystem.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                  description: The root directory. Uses '/' if not provided.
+                files:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - files
+      tags:
+        - Server Files
+
+  '/servers/{server}/files/create-folder':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Create Folder
+      operationId: post-servers-server-files-create-folder
+      responses:
+        '204':
+          description: No Content
+      description: Creates a new folder in the server's filesystem.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                  description: The root directory. Uses '/' if not provided.
+                name:
+                  type: string
+              required:
+                - name
+      tags:
+        - Server Files
+
+  '/servers/{server}/files/chmod':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Change File Permissions
+      operationId: post-servers-server-files-chmod
+      responses:
+        '204':
+          description: No Content
+      description: Updates file permissions for file(s) in the given root directory.
+      tags:
+        - Server Files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                root:
+                  type: string
+                  description: The root directory. Uses '/' if not provided.
+                files:
+                  type: array
+                  description: An array of objects with a file and mode field.
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      file:
+                        type: string
+                      mode:
+                        type: integer
+                    required:
+                      - file
+                      - mode
+              required:
+                - files
+
+  '/servers/{server}/files/pull':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    post:
+      summary: Pull Remote File
+      operationId: post-servers-server-files-pull
+      responses:
+        '204':
+          description: No Content
+      description: >-
+        Downloads a file from an external source into the server. The source
+        must be an absolute URL – redirects will not be followed.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL of the file to download from.
+                directory:
+                  type: string
+                  description: The directory to download the file to.
+                filename:
+                  type: string
+                  description: The name of the file.
+                use_header:
+                  type: boolean
+                  description: Whether to use the header for download.
+                foreground:
+                  type: boolean
+                  description: Whether to download in the foreground.
+              required:
+                - url
+      tags:
+        - Server Files
+
+  '/servers/{server}/files/upload':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: Get Upload URL
+      operationId: get-server-file-upload
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - signed_url
+                  attributes:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+      description: >-
+        Returns a signed upload URL that can be used to upload files to the
+        server's filesystem via a multipart POST request.
+      tags:
+        - Server Files
+
+  '/servers/{server}/schedules':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: List Schedules
+      operationId: get-server-schedules
+      description: Returns all schedules for a server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/schedule'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+      tags:
+        - Server Schedules
+    post:
+      summary: Create Schedule
+      operationId: create-server-schedule
+      description: Creates a new schedule for a server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/schedule'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 191
+                cron:
+                  type: object
+                  properties:
+                    day_of_week:
+                      type: string
+                    day_of_month:
+                      type: string
+                    month:
+                      type: string
+                    hour:
+                      type: string
+                    minute:
+                      type: string
+                  required:
+                    - day_of_week
+                    - day_of_month
+                    - month
+                    - hour
+                    - minute
+                is_active:
+                  type: boolean
+                only_when_online:
+                  type: boolean
+              required:
+                - name
+                - cron
+      tags:
+        - Server Schedules
+
+  '/servers/{server}/schedules/{schedule}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: schedule
+        in: path
+        required: true
+        description: The schedule ID.
+    get:
+      summary: Get Schedule
+      operationId: get-server-schedule
+      description: Returns a single schedule with its tasks.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/schedule'
+      tags:
+        - Server Schedules
+    post:
+      summary: Update Schedule
+      operationId: update-server-schedule
+      description: Updates an existing schedule.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/schedule'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 191
+                cron:
+                  type: object
+                  properties:
+                    day_of_week:
+                      type: string
+                    day_of_month:
+                      type: string
+                    month:
+                      type: string
+                    hour:
+                      type: string
+                    minute:
+                      type: string
+                is_active:
+                  type: boolean
+                only_when_online:
+                  type: boolean
+      tags:
+        - Server Schedules
+    delete:
+      summary: Delete Schedule
+      operationId: delete-server-schedule
+      responses:
+        '204':
+          description: No Content
+      description: Deletes a schedule and its tasks.
+      tags:
+        - Server Schedules
+
+  '/servers/{server}/schedules/{schedule}/execute':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: schedule
+        in: path
+        required: true
+        description: The schedule ID.
+    post:
+      summary: Execute Schedule
+      operationId: execute-server-schedule
+      responses:
+        '204':
+          description: No Content
+      description: Triggers immediate execution of a schedule.
+      tags:
+        - Server Schedules
+
+  '/servers/{server}/schedules/{schedule}/tasks':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: schedule
+        in: path
+        required: true
+        description: The schedule ID.
+    post:
+      summary: Create Task
+      operationId: create-server-schedule-task
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/task'
+      description: Creates a new task for a schedule.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - command
+                    - power
+                    - backup
+                payload:
+                  type: string
+                  description: The command to send (for action=command) or power signal (for action=power).
+                time_offset:
+                  type: integer
+                  description: Delay in seconds after the previous task completes.
+                continue_on_failure:
+                  type: boolean
+                sequence_id:
+                  type: integer
+              required:
+                - action
+                - time_offset
+      tags:
+        - Server Schedules
+
+  '/servers/{server}/schedules/{schedule}/tasks/{task}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: schedule
+        in: path
+        required: true
+        description: The schedule ID.
+      - schema:
+          type: integer
+        name: task
+        in: path
+        required: true
+        description: The task ID.
+    post:
+      summary: Update Task
+      operationId: update-server-schedule-task
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/task'
+      description: Updates an existing schedule task.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - command
+                    - power
+                    - backup
+                payload:
+                  type: string
+                time_offset:
+                  type: integer
+                continue_on_failure:
+                  type: boolean
+                sequence_id:
+                  type: integer
+      tags:
+        - Server Schedules
+    delete:
+      summary: Delete Task
+      operationId: delete-server-schedule-task
+      responses:
+        '204':
+          description: No Content
+      description: Deletes a task from a schedule.
+      tags:
+        - Server Schedules
+
+  '/servers/{server}/network/allocations':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: List Allocations
+      operationId: get-server-allocations
+      description: Returns all allocations for a server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/allocation'
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: '#/components/schemas/pagination'
+      tags:
+        - Server Network
+    post:
+      summary: Create Allocation
+      operationId: create-server-allocation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/allocation'
+      description: Assigns a new allocation to the server.
+      tags:
+        - Server Network
+
+  '/servers/{server}/network/allocations/{allocation}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: allocation
+        in: path
+        required: true
+        description: The allocation ID.
+    post:
+      summary: Update Allocation
+      operationId: update-server-allocation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/allocation'
+      description: Updates the notes for an allocation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+      tags:
+        - Server Network
+    delete:
+      summary: Delete Allocation
+      operationId: delete-server-allocation
+      responses:
+        '204':
+          description: No Content
+      description: Removes an allocation from the server.
+      tags:
+        - Server Network
+
+  '/servers/{server}/network/allocations/{allocation}/primary':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: allocation
+        in: path
+        required: true
+        description: The allocation ID.
+    post:
+      summary: Set Primary Allocation
+      operationId: set-server-primary-allocation
+      responses:
+        '204':
+          description: No Content
+      description: Sets the given allocation as the default/primary for the server.
+      tags:
+        - Server Network
+
+  '/servers/{server}/users':
+    parameters:
+      - $ref: '#/components/parameters/server'
+    get:
+      summary: List Subusers
+      operationId: get-server-subusers
+      description: Returns all subusers for a server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        object:
+                          type: string
+                        attributes:
+                          $ref: '#/components/schemas/subuser'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      tags:
+        - Server Users
+    post:
+      summary: Create Subuser
+      operationId: create-server-subuser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/subuser'
+      description: Creates a new subuser for the server.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email address of the user to add.
+                permissions:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - email
+                - permissions
+      tags:
+        - Server Users
+
+  '/servers/{server}/users/{user}':
+    parameters:
+      - $ref: '#/components/parameters/server'
+      - schema:
+          type: integer
+        name: user
+        in: path
+        required: true
+        description: The subuser ID.
+    get:
+      summary: Get Subuser
+      operationId: get-server-subuser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/subuser'
+      description: Returns a single subuser with their permissions.
+      tags:
+        - Server Users
+    post:
+      summary: Update Subuser
+      operationId: update-server-subuser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/subuser'
+      description: Updates the permissions for a subuser.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissions:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - permissions
+      tags:
+        - Server Users
+    delete:
+      summary: Delete Subuser
+      operationId: delete-server-subuser
+      responses:
+        '204':
+          description: No Content
+      description: Removes a subuser from the server.
+      tags:
+        - Server Users
+
+components:
+  schemas:
+    server:
+      type: object
+      properties:
+        server_owner:
+          type: boolean
+        tenant_id:
+          type:
+            - integer
+            - 'null'
+        tenant:
+          type:
+            - object
+            - 'null'
+          properties:
+            id:
+              type: integer
+            uuid:
+              type: string
+            name:
+              type: string
+            description:
+              type:
+                - string
+                - 'null'
+        identifier:
+          type: string
+          description: The server short UUID or the new-style identifier.
+        __deprecated_uuid_short:
+          type: string
+          description: The original uuid_short value, kept for backwards compatibility.
+        server_identifier:
+          type: string
+          description: The new-style server identifier (format: serv_XXXXXXXX).
+        internal_id:
+          type: integer
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        node:
+          type: string
+        is_node_under_maintenance:
+          type: boolean
+        sftp_details:
+          type: object
+          properties:
+            ip:
+              type: string
+            port:
+              type: number
+        connection:
+          type:
+            - string
+            - 'null'
+          description: >-
+            The connection string in shortUuid.lo:port format, or null if the
+            egg has no default port.
+        aliases:
+          type: array
+          items:
+            type: string
+          description: Network aliases for the server container.
+        description:
+          type: string
+        limits:
+          type: object
+          properties:
+            memory:
+              type: integer
+            swap:
+              type: integer
+            disk:
+              type: integer
+            io:
+              type: integer
+            cpu:
+              type: integer
+            threads:
+              type:
+                - string
+                - 'null'
+            oom_disabled:
+              type: boolean
+        invocation:
+          type: string
+        docker_image:
+          type: string
+        egg_features:
+          type:
+            - array
+            - 'null'
+          items:
+            type: string
+        feature_limits:
+          type: object
+          properties:
+            databases:
+              type:
+                - integer
+                - 'null'
+            allocations:
+              type:
+                - integer
+                - 'null'
+            backups:
+              type:
+                - integer
+                - 'null'
+        status:
+          type:
+            - string
+            - 'null'
+          enum:
+            - installing
+            - suspended
+            - install_failed
+            - restoring_backup
+            - transferring
+            - null
+        is_suspended:
+          type: boolean
+          description: Deprecated, use `status` instead.
+        is_installing:
+          type: boolean
+          description: Deprecated, use `status` instead.
+        is_transferring:
+          type: boolean
+        relationships:
+          type: object
+          description: >-
+            Relationships are generally only included when requested using the
+            `include` parameter on a request.
+          properties:
+            allocations:
+              type: object
+              properties:
+                object:
+                  type: string
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      object:
+                        type: string
+                      attributes:
+                        $ref: '#/components/schemas/allocation'
+            variables:
+              type: object
+              properties:
+                object:
+                  type: string
+                data:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: object
+                    properties:
+                      object:
+                        type: string
+                      attributes:
+                        $ref: '#/components/schemas/egg-variable'
+            egg:
+              type: object
+              properties:
+                object:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                    name:
+                      type: string
+            subusers:
+              type: object
+              properties:
+                object:
+                  type: string
+                data:
+                  type: array
+                  items:
+                    type: object
+
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+        admin:
+          type: boolean
+        username:
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        language:
+          type: string
+
+    allocation:
+      type: object
+      properties:
+        id:
+          type: integer
+        ip:
+          type: string
+        ip_alias:
+          type:
+            - string
+            - 'null'
+        port:
+          type: integer
+        notes:
+          type:
+            - string
+            - 'null'
+        is_default:
+          type: boolean
+
+    egg-variable:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        env_variable:
+          type: string
+        default_value:
+          type: string
+        server_value:
+          type: string
+        is_editable:
+          type: boolean
+        rules:
+          type: string
+
+    api-key:
+      type: object
+      properties:
+        identifier:
+          type: string
+        description:
+          type: string
+        allowed_ips:
+          type: array
+          items:
+            type: string
+        last_used_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+
+    server-database:
+      type: object
+      properties:
+        id:
+          type: string
+        host:
+          type: object
+          properties:
+            address:
+              type: string
+            port:
+              type: integer
+        name:
+          type: string
+        username:
+          type: string
+        connections_from:
+          type: string
+        max_connections:
+          type: integer
+        relationships:
+          type: object
+          properties:
+            password:
+              type: object
+              properties:
+                object:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    password:
+                      type: string
+
+    file-object:
+      type: object
+      properties:
+        name:
+          type: string
+        mode:
+          type: string
+        mode_bits:
+          type: string
+        size:
+          type: integer
+        is_file:
+          type: boolean
+        is_symlink:
+          type: boolean
+        mimetype:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        modified_at:
+          type: string
+          format: date-time
+
+    backup:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        is_successful:
+          type: boolean
+        is_locked:
+          type: boolean
+        name:
+          type: string
+        ignored_files:
+          type: array
+          items:
+            type: string
+        checksum:
+          type:
+            - string
+            - 'null'
+        bytes:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+
+    schedule:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        cron:
+          type: object
+          properties:
+            day_of_week:
+              type: string
+            day_of_month:
+              type: string
+            month:
+              type: string
+            hour:
+              type: string
+            minute:
+              type: string
+        is_active:
+          type: boolean
+        is_processing:
+          type: boolean
+        only_when_online:
+          type: boolean
+        last_run_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        next_run_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        relationships:
+          type: object
+          properties:
+            tasks:
+              type: object
+              properties:
+                object:
+                  type: string
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      object:
+                        type: string
+                      attributes:
+                        $ref: '#/components/schemas/task'
+
+    task:
+      type: object
+      properties:
+        id:
+          type: integer
+        sequence_id:
+          type: integer
+        action:
+          type: string
+          enum:
+            - command
+            - power
+            - backup
+        payload:
+          type: string
+        time_offset:
+          type: integer
+        is_queued:
+          type: boolean
+        continue_on_failure:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    subuser:
+      type: object
+      properties:
+        uuid:
+          type: string
+        identifier:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+          format: uri
+        '2fa_enabled':
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        permissions:
+          type: array
+          items:
+            type: string
+
+    stats:
+      type: object
+      properties:
+        current_state:
+          type: string
+          enum:
+            - offline
+            - running
+            - starting
+            - stopping
+        is_suspended:
+          type: boolean
+        resources:
+          type: object
+          properties:
+            memory_bytes:
+              type: integer
+            cpu_absolute:
+              type: number
+            disk_bytes:
+              type: integer
+            network_rx_bytes:
+              type: integer
+            network_tx_bytes:
+              type: integer
+            uptime:
+              type: integer
+
+    activity-log:
+      type: object
+      properties:
+        id:
+          type: string
+          description: SHA1 hash of the activity log ID.
+        batch:
+          type: string
+        event:
+          type: string
+        is_api:
+          type: boolean
+        ip:
+          type:
+            - string
+            - 'null'
+          description: IP address if visible to the user, null otherwise.
+        description:
+          type:
+            - string
+            - 'null'
+        properties:
+          type: object
+        has_additional_metadata:
+          type: boolean
+        timestamp:
+          type: string
+          format: date-time
+        relationships:
+          type: object
+          properties:
+            actor:
+              type: object
+              properties:
+                object:
+                  type: string
+                attributes:
+                  $ref: '#/components/schemas/user'
+
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ValidationException
+        status:
+          type: string
+          example: '422'
+        detail:
+          type: string
+          example: The description field is required.
+        meta:
+          type:
+            - object
+            - 'null'
+          properties:
+            source_field:
+              type: string
+              example: description
+            rule:
+              type: string
+              example: required
+      required:
+        - code
+        - status
+        - detail
+      readOnly: true
+
+    pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        count:
+          type: integer
+          minimum: 0
+        per_page:
+          type: integer
+          minimum: 1
+        current_page:
+          type: integer
+          minimum: 1
+        total_pages:
+          type: integer
+          minimum: 1
+        links:
+          type: object
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  responses:
+    '400':
+      description: >-
+        A `400: Bad Request` error response is generally returned when the
+        request you're making cannot be processed, and is not due to an internal
+        server error or validation issue.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+    '401':
+      description: >-
+        A `401: Unauthorized` error response is returned when you fail to
+        include proper authorization headers in your API request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+    '403':
+      description: >-
+        A `403: Forbidden` error response indicates that you lack permission to
+        perform the given action.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+    '405':
+      description: >-
+        A `405: Method Not Allowed` error response is returned if you make a
+        request to an endpoint that exists but does not support the given HTTP
+        verb.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+    '422':
+      description: >-
+        A `422: Unprocessable Entity` error response is returned when the data
+        provided to the endpoint failed to pass validation controls.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+
+  parameters:
+    server:
+      name: server
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The server UUID or server identifier.
+    api-key:
+      name: identifier
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Api Key id
+    include:
+      name: include
+      in: query
+      required: false
+      schema:
+        type: string
+      description: A comma delimited set of relationships to include
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      description: Which page of items to request
+    per_page:
+      name: per_page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 50
+      description: How many items can be included per page
+    database:
+      name: database
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The database to act on
+    file:
+      name: file
+      in: query
+      required: true
+      schema:
+        type: string
+      description: The target file path.
+
+  requestBodies: {}
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Account
+    description: Account Routes
+  - name: Server
+    description: Server Routes
+  - name: Server Backups
+    description: Server Backups Routes
+  - name: Server Databases
+    description: Server Databases Routes
+  - name: Server Files
+    description: Server Files Routes
+  - name: Server Schedules
+    description: Server Schedules Routes
+  - name: Server Network
+    description: Server Network Routes
+  - name: Server Users
+    description: Server Subuser Routes

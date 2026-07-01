@@ -1,0 +1,51 @@
+{
+  "name": "ptctl",
+  "version": "0.1.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "description": "Node-compatible CLI for the Pterodactyl client API.",
+  "keywords": [
+    "pterodactyl",
+    "cli"
+  ],
+  "homepage": "https://github.com/stdpi/ptctl#readme",
+  "bugs": {
+    "url": "https://github.com/stdpi/ptctl/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stdpi/ptctl.git"
+  },
+  "license": "MIT",
+  "author": "stdpi",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "pt": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "pt": "node ./dist/cli.js",
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "@types/node": "^22.15.30",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

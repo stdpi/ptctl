@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "nodejs-cli-best-practices": {
+      "source": "lirantal/nodejs-cli-apps-best-practices",
+      "sourceType": "github",
+      "skillPath": "skills/nodejs-cli-best-practices/SKILL.md",
+      "computedHash": "89135a0804a3ec814052ee1773c1225883d22e48b98e7231348019a3b00c810e"
+    }
+  }
+}
