@@ -6,7 +6,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "description": "Node-compatible CLI for the Pterodactyl client API.",
+  "description": "CLI for the Pterodactyl client API.",
   "keywords": [
     "pterodactyl",
     "cli"
