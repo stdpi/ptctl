@@ -1,5 +1,5 @@
-import { ApiError } from "./errors.js"
-import type { Account, Backup, FileEntry, RedactedRequest, ServerSummary, SshKey } from "./types.js"
+import { ApiError } from "./errors"
+import type { Account, Backup, FileEntry, RedactedRequest, ServerSummary, SshKey } from "./types"
 
 type RequestOptions = {
   query?: Record<string, string | number | boolean | undefined>

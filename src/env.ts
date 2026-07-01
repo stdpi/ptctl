@@ -1,4 +1,4 @@
-import type { EnvConfig } from "./types.js"
+import type { EnvConfig } from "./types"
 import { readFile } from "node:fs/promises"
 import { homedir } from "node:os"
 import { resolve } from "node:path"

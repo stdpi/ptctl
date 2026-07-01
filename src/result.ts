@@ -1,4 +1,4 @@
-import type { Result } from "./types.js"
+import type { Result } from "./types"
 
 export const ok = <T>(kind: string, data: T, meta?: Record<string, unknown>, hints?: string[]): Result<T> => ({
   ok: true,

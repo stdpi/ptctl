@@ -1,6 +1,6 @@
 {
   "name": "ptctl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "publishConfig": {
     "access": "public",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "author": "stdpi",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/cli.js",
   "bin": {
     "pt": "dist/cli.js"
   },
@@ -31,9 +31,9 @@
     "README.md"
   ],
   "scripts": {
-    "pt": "node ./dist/cli.js",
-    "build": "tsc -p tsconfig.build.json",
-    "prepare": "tsc -p tsconfig.build.json",
+    "pt": "bun ./dist/cli.js",
+    "build": "bun build ./src/cli.ts --outdir ./dist --target bun",
+    "prepare": "bun build ./src/cli.ts --outdir ./dist --target bun",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test"
   },

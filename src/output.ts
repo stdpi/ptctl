@@ -1,5 +1,5 @@
-import type { Result } from "./types.js"
-import { presentDetail, presentFilesList, presentServersList } from "./presenter.js"
+import type { Result } from "./types"
+import { presentDetail, presentFilesList, presentServersList } from "./presenter"
 
 const stableStringify = (value: unknown): string => JSON.stringify(value, null, 2)
 

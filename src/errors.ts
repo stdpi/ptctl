@@ -1,4 +1,4 @@
-import type { RedactedRequest } from "./types.js"
+import type { RedactedRequest } from "./types"
 
 export class CliError extends Error {
   constructor(message: string) {
